@@ -1,0 +1,86 @@
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/vFishyTurtle/SN-Lib/main/src'))()
+local lib = Library:CreateWindow({Title = "CustomMagnets"})
+
+local t1 = lib:NewTab({Name = "Main"})
+local s1 = t1:NewSection({Name = "Magnets"})
+
+s1:NewToggle({
+	Name = "Magnets",
+	default = false,
+	callback = function(v)
+		local Workspace = game:GetService("Workspace")
+
+Workspace.ChildAdded:Connect(function(Child)
+    if Child:IsA("BasePart") and Child.Name == "Football" then
+        Child.Size = Vector3.new(25, 25, 25) 
+        Child.CanCollide = false
+        Child.Massless = true 
+    end
+end)
+
+print("MagsAreActivated")
+	end,
+})
+
+t1:NewSlider({
+	Name = "CustomMagnets",
+	default = 0,
+	min = 0,
+	max = 50,
+	callback = function(v)
+		print(v)
+	end,
+})
+
+s1:NewDropdown({
+	Name = "MagnetTypes",
+	options = {"Custom", "Blatant", "Legit"},
+	default = "Custom",
+	callback = function(v)
+		print("MagnetTypeIsActivated")
+	end,
+})
+
+s1:NewToggle({
+	Name = "QuickTP",
+	default = false,
+	callback = function(v)
+		
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+
+
+local player = Players.LocalPlayer
+
+
+local function teleportPlayer()
+    local character = player.Character
+    if not character then return end
+    
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then
+        warn("HumanoidRootPart not found.")
+        return
+    end
+
+ 
+    local teleportDistance = 11
+
+
+    local currentPosition = humanoidRootPart.Position
+    local direction = humanoidRootPart.CFrame.LookVector  
+    local targetPosition = currentPosition + direction * teleportDistance
+
+    -- Teleport the player
+    humanoidRootPart.CFrame = CFrame.new(targetPosition)
+end
+
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.F then
+        teleportPlayer()
+    end
+end)
+
+	end,
+})
